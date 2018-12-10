@@ -157,6 +157,8 @@ class Chart extends View {
     if (this.get('forceFit')) {
       width = DomUtil.getWidth(container, width);
       this.set('width', width);
+      height = DomUtil.getHeight(container, height);
+      this.set('height', height);
     }
     const renderer = this.get('renderer');
     const canvas = new Canvas({
@@ -296,8 +298,9 @@ class Chart extends View {
     const container = self.get('container');
     const oldWidth = self.get('width');
     const width = DomUtil.getWidth(container, oldWidth);
-    if (width !== 0 && width !== oldWidth) {
-      const height = self.get('height');
+    const oldHeight = self.get('height');
+    const height = DomUtil.getHeight(container, oldHeight);
+    if (width !== 0 && width !== oldWidth && height !== 0 && height !== oldHeight) {
       self.changeSize(width, height);
     }
     return self;
