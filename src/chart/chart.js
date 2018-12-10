@@ -143,7 +143,7 @@ class Chart extends View {
       this.set('container', id);
     }
     let width = this.get('width');
-    const height = this.get('height');
+    let height = this.get('height');
     if (Util.isString(container)) {
       container = document.getElementById(container);
       if (!container) {
