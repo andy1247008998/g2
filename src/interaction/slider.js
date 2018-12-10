@@ -72,13 +72,14 @@ class Slider extends Interaction {
       return;
     }
     const width = DomUtil.getWidth(me.domContainer);
-    const height = me.height;
-    if (width !== me.domWidth) {
+    const height = DomUtil.getHeight(me.domContainer);
+    // const height = me.height;
+    if (width !== me.domWidth || height !== me.domHeight) {
       const canvas = me.canvas;
       canvas.changeSize(width, height); // 改变画布尺寸
-      me.bgChart && me.bgChart.changeWidth(width);
+      me.bgChart && me.bgChart.changeWidth(width) && me.bgChart.changeHeight(height);
       canvas.clear();
-      me._initWidth();
+      me._initSize();
       me._initSlider(); // 初始化滑动条
       me._bindEvent();
       canvas.draw();
@@ -100,7 +101,7 @@ class Slider extends Interaction {
       window.addEventListener('resize', Util.wrapBehavior(me, '_initForceFitEvent'));
     }
   }
-  _initWidth() {
+  _initSize() {
     const me = this;
     let width;
     if (me.width === 'auto') {
@@ -109,15 +110,22 @@ class Slider extends Interaction {
       width = me.width;
     }
     me.domWidth = width;
+    let height;
+    if (me.height === 'auto') {
+      height = DomUtil.getHeight(me.domContainer);
+    } else {
+      height = me.height;
+    }
+    me.domHeight = height;
     const padding = Util.toAllPadding(me.padding);
 
     if (me.layout === 'horizontal') {
       me.plotWidth = width - padding[1] - padding[3];
       me.plotPadding = padding[3];
-      me.plotHeight = me.height;
+      me.plotHeight = height;
     } else if (me.layout === 'vertical') {
-      me.plotWidth = me.width;
-      me.plotHeight = me.height - padding[0] - padding[2];
+      me.plotWidth = width;
+      me.plotHeight = height - padding[0] - padding[2];
       me.plotPadding = padding[0];
     }
   }
@@ -351,7 +359,7 @@ class Slider extends Interaction {
 
   render() {
     const me = this;
-    me._initWidth();
+    me._initSize();
     me._initCanvas();
     me._initBackground();
     me._initSlider();
